@@ -1,0 +1,75 @@
+---
+title: "Week 1 HW"
+author: "Luke Carignan"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true # Add a Table of Contents
+    number_sections: true # add automatic numbering to headers
+---
+```{r, include=FALSE}
+library(fs)
+library(knitr)
+```
+
+## Exercise 1: What is your home directory? What files/folders exist in your home directory? Navigate to it and then navigate back to your notes.
+```{r}
+home_dir <- path_home()
+home_contents <- dir_ls(home_dir)
+print(home_contents)
+
+```
+
+## Exercise 2: Where does the following command take you? How does it work?
+The "cd" command changes the dircetory, where "~" is pulling from my current directory. "/../../.." moves the directory up two levels.
+
+## Exercise 3: Read the manual page of ls. What does the a flag do? What does the l flag do?
+```{r}
+system("man ls")
+```
+The a flag is used to "Include directory entries whose names begin with a dot (‘.’)"; while the l flag is used to "List files in the long format", where the long format can be found in the manual. 
+
+## Exercise 4: Create a new file with touch command. for instance touch myfile.txt. Run stat myfile.txt. What information do you get?
+```{r}
+system("touch myfile.txt")
+file_info <- system("stat myfile.txt", intern = TRUE)
+cat(file_info, sep = "\n")
+```
+
+## Exercise 5: Run ls and from there list select a file. Now run "ls-l" to display the details of the files, showing it has been created or updated. What information does it give you regarding the myfile.txt and your selected file?
+```{r}
+system("touch myfile.txt")
+list_file <- system("ls", intern = TRUE)
+print(list_file)
+
+select_file <- list_file[list_file != "myfile.txt"][3]
+file_details <- system("ls -l myfile.txt", intern = TRUE)
+file_details2 <- system(paste("ls -l", select_file), inter = TRUE)
+cat(file_details, sep = "\n")
+cat(file_details2, sep = "\n")
+
+```
+## Exercise 6: Add the following line This line is my first line to myfile.txt. Then run cat myfile.txt to show the line is added.
+```{r}
+system("echo 'This line is my first line' > myfile.txt")
+file_contents <- system("cat myfile.txt", intern = TRUE)
+
+cat(file_contents, sep = "\n")
+
+```
+
+## Exercise 7: Run touch myfile.txt then run ls -l myfile.txt does the “timestamp” for the file myfile.txt is updated? Show the output. Note: Another common use of the touch command is to update the timestamps of an existing file.
+```{r}
+system("touch myfile.txt")
+details_before <- system("ls -l myfile.txt", intern = TRUE)
+cat("File details before updating timestamp:\n")
+cat(details_before, sep = "\n")
+
+Sys.sleep(3)
+system("touch myfile.txt")
+details_after <- system("ls -l myfile.txt", intern = TRUE)
+cat("\nFile details after updating timestamp:\n")
+cat(details_after, sep = "\n")
+
+```
+
